@@ -1,0 +1,44 @@
+# windows
+Thumbs.db
+ehthumbs.db
+
+# scons
+.sconsign.dblite
+.sconf_temp
+*.pyc
+
+# vim
+*.swp
+*.swo
+
+# Misc
+.DS_Store
+logs/
+
+# Build results
+build/
+
+# Visual Studio cache/options directory
+.vs/
+/.vs
+/.vscode
+
+*.o
+*.a
+*.obj
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+
+# CodeLite project files
+*.project
+*.workspace
+.codelite/
+
+# Kdevelop project files
+*.kdev4
+
+# xCode
+xcuserdata

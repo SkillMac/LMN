@@ -1,0 +1,12 @@
+
+
+# SConscript("main/Scons")
+
+dir_main = Glob("./main/*.cpp");
+
+# Program("HelloWorld",Glob("*.cpp"));
+
+pro = Program("HelloWorld", dir_main, CPPPATH=['./thirdparty/glad/include','./thirdparty/glad/src']);
+# env = Environment();
+
+# env.Program()
