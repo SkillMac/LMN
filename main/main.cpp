@@ -1,7 +1,9 @@
-#include <iostream>
-#include "glad/glad.h"
+#include "window.h"
 
-int main() {
-	std::cout << "helloworld" << std::endl;
-	system("pause");
+int main()
+{
+	Dialog* dialog = Dialog::get_singleton();
+	dialog->init();
+	dialog->setup("HelloWorld", 1280, 720);
+	return 0;
 }
