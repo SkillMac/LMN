@@ -1,6 +1,7 @@
 import os
+import sys
 
-for key in os.environ:
-	print(key+'', os.environ[key]+'')
+# print([x for x in os.environ])
 
-# print(os.getenv("WindowsSdkDir"))
+print( [p for p in os.getenv("INCLUDE").split(";")])
+print( [p for p in os.getenv("LIB").split(";")])

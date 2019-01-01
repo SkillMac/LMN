@@ -2,27 +2,7 @@ import os
 
 # SConscript("main/Scons")
 
-
-
-# pro = Program("HelloWorld", dir_main,
-# 	CPPPATH = [
-# 		'./thirdparty/glad/include',
-# 		'./thirdparty/glad/src',
-# 		'./thirdparty/glfw/include',
-# 	],
-# 	LIBPATH = [
-# 		'./thirdparty/glfw/lib-vc2015',
-# 	],
-# 	LIBS = [
-# 		'glfw3',
-# 		# 'opengl32',
-# 	],
-	# LINKFLAGS = ['/MACHINE:X86'],
-	# CXXFLAGS = ['/EHsc'],)
-	# TARGET_ARCH = 'x86')
-
-
-env = Environment();
+env = Environment(TARGET_ARCH = "x86");
 
 # project
 dir_main = Glob("./main/*.cpp") + Glob("./thirdparty/glad/src/*.c");
@@ -31,9 +11,10 @@ env.Append(CPPPATH = [
 	'./thirdparty/glad/src',
 	'./thirdparty/glfw/include',
 ])
-env.Append(CXXFLAGS = ['/EHsc'])
+env.AppendUnique(CCFLAGS=['/MT', '/Gd', '/GR', '/nologo'])
+env.AppendUnique(CXXFLAGS = ['/EHsc','/Gd','/W3','/Zc:wchar_t','/Zc:inline'])
 env.Append(LIBPATH = ['./thirdparty/glfw/lib-vc2015',])
-env.Append(LIBS = ['glfw3'])
+env.Append(LIBS = ['glfw3','opengl32'])
 # env.Append()
 
 
@@ -48,14 +29,15 @@ env.Append(LIBPATH = [p for p in os.getenv("LIB").split(";")])
 
 lib = [
 "kernel32","user32","gdi32","winspool","comdlg32","advapi32",
-"shell32","ole32","oleaut32","uuid","odbc32","odbccp32","opengl32"]
+"shell32","ole32","oleaut32","uuid","odbc32","odbccp32","msvcrt"]
 env.Append(LIBS = lib)
 env.Append(CPPDEFINES = ["_MBCS",'WIN32', 'MSVC'])
 
 # link
 env.Append(LINKFLAGS=['/MACHINE:X86'])
 
-env.Append(TARGET_ARCH="x86")
-# print(env['TARGET_ARCH']);
+
+# env['bits'] = '32'
+# env["x86_libtheora_opt_vc"] = True
 
 env.Program("HelloWorld", dir_main)
