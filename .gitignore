@@ -31,6 +31,8 @@ build/
 *.psess
 *.vsp
 *.vspx
+*.ilk
+*.pdb
 
 # CodeLite project files
 *.project
