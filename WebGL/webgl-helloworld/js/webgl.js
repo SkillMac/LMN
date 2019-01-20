@@ -3,30 +3,28 @@
  */
 !(function () {
     // first init global variable
-    let _global = typeof window === "undefined" ? global : window;
+    let _global = typeof window === "undefined" ? global : window.top;
 
-    function logger() {
-        const proto = logger.prototype;
-
-        proto.log = () => {
+    let logger = {
+        log(){
             console.log(...arguments);
-        }
+        },
 
-        proto.error = (err) => {
+        error(){
             console.error(...arguments);
-        }
+        },
 
-        proto.warn = () => {
+        warn(){
             console.warn(...arguments);
-        }
+        },
 
-        proto.trace = () => {
+        trace(){
             console.trace(...arguments);
-        }
+        },
 
-        proto.alert = () => {
+        alert(){
             alert(...arguments);
-        }
+        },
     }
 
     function loadShader(type, source) {
@@ -34,7 +32,7 @@
         gl.shaderSource(shader, source);
         gl.compileShader(shader);
         if(!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-            alert('compile shader fail =>', gl.getShaderInfoLog(shader));
+            logger.error('compile shader fail =>', gl.getShaderInfoLog(shader));
             gl.deleteShader(shader);
             return null;
         }
@@ -43,36 +41,51 @@
 
     function linkProgram(vShaderSource, fShaderSource) {
         let program = gl.createProgram();
-        let vShader = loadShader(gl, gl.VERTEX_SHADER, vShaderSource);
-        let vShader = loadShader(gl, gl.FRAGMENT_SHADER, fShaderSource);
+        let vShader = loadShader(gl.VERTEX_SHADER, vShaderSource);
+        let fShader = loadShader(gl.FRAGMENT_SHADER, fShaderSource);
 
         gl.attachShader(program,vShader);
         gl.attachShader(program,fShader);
         gl.linkProgram(program);
 
+        let delShader = () => {
+            gl.deleteShader(vShader);
+            gl.deleteShader(fShader);
+        }
+
         if(!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            alert('link program fail =>', gl.getProgramInfoLog(program));
+            logger.error('link program fail =>', gl.getProgramInfoLog(program));
+            delShader();
             gl.deleteProgram(program);
             return null;
         }
-        gl.deleteShader(vShader);
-        gl.deleteShader(fShader);
+        delShader();
         return program;
     }
 
     function createVertexBuffer(data) {
-        const bufferId = gl.createBuffer(1);
+        let bufferId = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
         // cancle bind buffer data
-        gl.bindBuffer(gl.ARRAY_BUFFER, 0);
+        // gl.bindBuffer(gl.ARRAY_BUFFER, null);
         return bufferId;
     }
 
     function getAttrLocation(shaderProgram, feildName) {
         let location = gl.getAttribLocation(shaderProgram, feildName);
         if(location < 0) {
-            logger.err(`获取着色器这个字段${feildName}失败`);
+            logger.error(`获取着色器这个字段${feildName}失败`);
+            return;
+        }
+        return location;
+    }
+
+    function getUniformLocation(shaderProgram, feildName) {
+        const location = gl.getUniformLocation(shaderProgram, feildName);
+        if(location < 0) {
+            logger.error(`获取着色器这个字段${feildName}失败`);
+            return;
         }
         return location;
     }
@@ -82,12 +95,39 @@
         gl.enableVertexAttribArray(locationId);
     }
 
-    function drawScene(program, bufferId, firstIndex, vertexNum) {
+    function drawScene(program, data, firstIndex, vertexNum, dt) {
         gl.clearColor(.0,.0,.0,1.0); // 黑色
         gl.clear(gl.COLOR_BUFFER_BIT);
+
+        // calc data
+        const fieldOfView = 45 * Math.PI / 180;   // in radians
+        const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+        const zNear = 0.1;
+        const zFar = 1000.0;
+
+        const projectionMatrix = mat4.create();
+        mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+
+        const modelViewMatrix = mat4.create();
+        mat4.translate(modelViewMatrix,     // destination matrix
+            modelViewMatrix,     // matrix to translate
+            [0.0, 0.0, -5]);
+
+        mat4.rotate(modelViewMatrix, modelViewMatrix, data.angle, [0.0,0.0,1.0]);
         
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, data.vertextBufferId);
+        gl.bindBuffer(gl.ARRAY_BUFFER, data.colorBufferId);
         gl.useProgram(program);
-        gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
+
+        gl.uniformMatrix4fv(
+            getUniformLocation(program, 'projectionMatrix'),
+            false,
+            projectionMatrix);
+        gl.uniformMatrix4fv(
+            getUniformLocation(program, 'modelViewMatrix'),
+            false,
+            modelViewMatrix);
 
         gl.drawArrays(gl.TRIANGLES, firstIndex, vertexNum);
     }
@@ -95,34 +135,76 @@
     function main() {
         const vShader = `
             attribute vec4 a_Position;
+            attribute vec4 a_VertexColor;
+
+            uniform mat4 modelViewMatrix;
+            uniform mat4 projectionMatrix;
+
+            varying lowp vec4 vColor;
+
             void main() {
-                gl_Position = a_Position;
+                gl_Position = projectionMatrix * modelViewMatrix * a_Position;
+                vColor = a_VertexColor;
             }
         `;
         const fShader = `
-            gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+            varying lowp vec4 vColor;
+
+            void main() {
+                gl_FragColor = vColor;
+            }
         `;
         let canvas = document.getElementById('myCanvas');
         let gl = canvas.getContext('webgl');
         if(!gl) {
-            alert("current browser don't support webgl");
+            logger.error("current browser don't support webgl");
             return;
         }
 
         _global.gl = gl;
 
-        let vertextData = [.0,.5,-.5,.0,.5,.0];
+        let vertextData = [
+            0.0,0.5,
+            -0.5,0.0,
+            0.5,0.0
+        ];
+        let vertexColor = [
+            1.0, 0.0, 0.0, 1.0,
+            0.0, 1.0, 0.0, 1.0,
+            0.0, 0.0, 1.0, 1.0,
+        ];
         let vertextNum = 3;
 
         // compile shader source
         const program = linkProgram(vShader, fShader);
-        setShaderDataFormat(getAttrLocation(program, 'a_Position'), vertextNum, gl.FLOAT)
 
         // carete data buffer
-        const bufferId = createVertexBuffer(vertextData);
+        const vertextBufferId = createVertexBuffer(vertextData);
+        setShaderDataFormat(getAttrLocation(program, 'a_Position'), 2, gl.FLOAT, false, 0, 0);
 
-        // drawScene
-        drawScene(program, bufferId, 0, vertextNum);
+        // assign vertex color
+        const colorBufferId = createVertexBuffer(vertexColor);
+        setShaderDataFormat(getAttrLocation(program, 'a_VertexColor'), 4, gl.FLOAT, false, 0, 0);
+
+
+        let game_time = 0;
+        let angle = 0;
+
+        function render(now) {
+            now *= 0.001;
+            let dt = now - game_time;
+            game_time += dt;
+            angle += dt;
+            // drawScene
+            drawScene(program, {
+                vertextBufferId : vertextBufferId,
+                colorBufferId : colorBufferId,
+                angle: angle,
+            }, 0, vertextNum, dt);
+
+            requestAnimationFrame(render);    
+        }
+        requestAnimationFrame(render);
     }
     main();
-})()
+})();

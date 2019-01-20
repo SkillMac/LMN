@@ -1,6 +1,8 @@
 #include "window.h"
+#include "draw.h"
 
 Dialog *Dialog::instance = NULL;
+static Draw *draw = Draw::get_instance();
 
 Dialog *Dialog::get_singleton()
 {
@@ -21,7 +23,7 @@ void Dialog::init()
 
 void framebuffer_size_callback(GLFWwindow * window, int width, int height)
 {
-	glViewport(0, 0, width, height);
+	draw->change_frame(width,height);
 }
 
 void Dialog::processInput()
@@ -41,12 +43,9 @@ void Dialog::setup(const std::string title, int width, int height)
 	}
 	glfwMakeContextCurrent(window);
 
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-	}
+	draw->set_glad_gl_loader();
 
-	glViewport(0, 0, width, height);
+	draw->change_frame(width,height);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -54,8 +53,8 @@ void Dialog::setup(const std::string title, int width, int height)
 	{
 		processInput();
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		draw->run();
+		draw->run_end();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
