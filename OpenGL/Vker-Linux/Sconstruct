@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+# Program("Vker", Glob('*.cpp'));
+
+import os
+
+env = Environment(TARGET_ARCH="x86_64")
+
+# scons config
+env.Decider("MD5-timestamp")
+env.SetOption("implicit_cache", 1)
+
+# project
+dir_main = Glob("./*.cpp") + Glob("./thirdparty/glad/src/*.c")
+
+env.Append(CPPPATH = [
+    "./thirdparty/glad/include",
+    "./thirdparty/glad/src",
+])
+
+env.Append(LIBS = ["libglfw3", "GL", "dl"]);
+
+env.Program("Vker", dir_main);

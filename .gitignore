@@ -23,6 +23,7 @@ build/
 /.vs
 /.vscode
 
+*.so
 *.o
 *.a
 *.obj
@@ -44,3 +45,7 @@ build/
 
 # xCode
 xcuserdata
+
+# myself project
+/bin/
+*.exe
