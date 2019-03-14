@@ -18,6 +18,9 @@ env.Append(CPPPATH = [
     "./thirdparty/glad/src",
 ])
 
-env.Append(LIBS = ["libglfw3", "GL", "dl"]);
+# -lGLEW -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread
 
+env.Append(LIBS = ["libglfw3", "GL", "dl", "libX11.so", "libpthread.so","libXxf86vm.so", "libXrandr.so", "libXi.so", "libXinerama.so", "libXcursor.so"]);
+
+# env.Append(CXXFLAGS = ["-lX11"])
 env.Program("Vker", dir_main);
