@@ -5,8 +5,6 @@
 #include <string>
 #include <Windows.h>
 
-
-
 class Log {
 private:
 	enum ConsoleForegroundColor

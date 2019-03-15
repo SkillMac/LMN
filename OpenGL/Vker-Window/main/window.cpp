@@ -61,7 +61,8 @@ void Dialog::setup(const std::string title, int width, int height)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
+	Draw::get_instance()->end();
+    glfwDestroyWindow(window);
 	glfwTerminate();
 }
 

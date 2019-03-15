@@ -4,16 +4,14 @@
 
 int main()
 {
-    Log::get_instance()->error<std::string>("haha");
-    Log::get_instance()->log<std::string>("log");
-    Log::get_instance()->warn<std::string>("warn");
+    Log::get_instance()->error<std::string>("error test");
 	// init draw
 	Draw *draw = Draw::get_instance();
 	draw->init();
 	// setup
 	Dialog* dialog = Dialog::get_singleton();
 	dialog->init();
-	dialog->setup("LMN", 1280, 720);
+	dialog->setup("Vker", 1280, 720);
     
 	// release
 	return 0;

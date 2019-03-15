@@ -34,7 +34,7 @@ void Draw::run_end()
 
 void Draw::end()
 {
-
+    // when window close
 }
 
 void Draw::change_frame(int width, int height)
