@@ -48,7 +48,7 @@ void setup()
         glfwTerminate();
     }
     glfwMakeContextCurrent(window);
-    if(gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Init glad failed" << std::endl;
     }

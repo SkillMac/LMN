@@ -1,0 +1,11 @@
+Import('env')
+
+env.Append(CPPPATH = [
+	'#platform/Linux'
+])
+
+# -lGLEW -lglfw3 -lGL -lX11 -lXi -lXrandr -lXxf86vm -lXinerama -lXcursor -lrt -lm -pthread -lXrender
+
+env.Append(LIBS = ["libglfw3", "GL", "dl", "libX11.so", "libpthread.so","libXxf86vm.so", "libXrandr.so", "libXi.so", "libXinerama.so", "libXcursor.so", "libXrender.so"]);
+
+env.source += Glob("*.cpp")

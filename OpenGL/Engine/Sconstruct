@@ -1,0 +1,28 @@
+
+import os
+
+platform = ARGUMENTS.get('p','Linux')
+
+# build params
+vars = Variables('custom.py',ARGUMENTS)
+vars.Add(ListVariable('p', 'you want to build platform(default: windows)', 'Linux',
+                    ['Windows', 'Linux', 'MacOX']))
+vars.Add(ListVariable('bits', 'you want to build platform(default: 64)', 'x86_64',
+                    ['x86_64', 'x86', 'x64']))
+
+# 64 bit
+env = Environment(variables = vars, TARGET_ARCH="${bits}")
+env.source = []
+
+vars.Update(env)
+Help(vars.GenerateHelpText(env))
+
+# scons config
+env.Decider("MD5-timestamp")
+env.SetOption("implicit_cache", 1)
+
+Export('env')
+SConscript("platform/"+platform+"/Scons")
+SConscript("main/Scons")
+
+env.Program("bin/Vker_${p}_${bits}_debug", env.source)
