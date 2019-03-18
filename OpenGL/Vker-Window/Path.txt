@@ -1,0 +1,13 @@
+D:/pro/Engine_pro/scons_pro_test/github/LMN/OpenGL/Vker-Window/thirdparty/glad/include
+D:/pro/Engine_pro/scons_pro_test/github/LMN/OpenGL/Vker-Window/main
+C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/um
+C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/winrt
+D:/pro/Engine_pro/scons_pro_test/github/LMN/OpenGL/Vker-Window/thirdparty/glm
+C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/cppwinrt
+C:/Program Files (x86)/Windows Kits/10/Include
+C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/atlmfc/include
+C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.15.26726/include
+C:/Program Files (x86)/Windows Kits/NETFXSDK/4.6.1/Include/um
+C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/ucrt
+C:/Program Files (x86)/Windows Kits/10/Include/10.0.17134.0/shared
+D:/pro/Engine_pro/scons_pro_test/github/LMN/OpenGL/Vker-Window/thirdparty/glfw/include
