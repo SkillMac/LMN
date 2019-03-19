@@ -6,6 +6,7 @@ class Draw {
 public:
     static Draw *get_instance();
     void init();
+    void run_start();
     void run();
     void run_end();
     void end();

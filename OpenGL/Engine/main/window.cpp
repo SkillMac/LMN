@@ -50,18 +50,21 @@ void Dialog::setup(const std::string title, int width, int height)
 	Draw::get_instance()->change_frame(width,height);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    
+    Draw* draw = Draw::get_instance();
 
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput();
-
-		Draw::get_instance()->run();
-		Draw::get_instance()->run_end();
+        
+        draw->run_start();
+		draw->run();
+		draw->run_end();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	Draw::get_instance()->end();
+	draw->end();
     glfwDestroyWindow(window);
 	glfwTerminate();
 }

@@ -21,9 +21,14 @@ void Draw::init()
 
 }
 
+void Draw::run_start()
+{
+    //TODO
+}
+
 void Draw::run()
 {
-
+    //TODO
 }
 
 void Draw::run_end()

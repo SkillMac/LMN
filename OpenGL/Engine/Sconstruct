@@ -27,5 +27,6 @@ env.SetOption("implicit_cache", 1)
 Export('env')
 SConscript("platform/"+platform+"/Scons")
 SConscript("main/Scons")
+Sconscript("renderer/Scons")
 
 env.Program("bin/${p}/Vker_${p}_${bits}_debug", env.source)
