@@ -46,4 +46,11 @@
 
 #define TEST_ENGINE
 
+#ifdef TEST_ENGINE
+#define PROJ_PATH = "/run/media/vker/041D86B62B1168C1/github/LMN/OpenGL/Engine/"
+#else
+#define PROJ_PATH = ""
+#endif
+
+
 #endif

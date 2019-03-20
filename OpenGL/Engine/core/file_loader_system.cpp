@@ -1,6 +1,10 @@
 #include "file_loader_system.h"
 #include "stb_image.h"
+
+#ifdef WINDOWS
 #include <direct.h>
+#endif
+
 #include <iostream>
 
 FileLoader::FileLoader()
@@ -32,6 +36,10 @@ std::string FileLoader::getProjPath()
     _getcwd(data, _MAX_PATH);
     return std::string(data);
 #endif
+#ifdef TEST_ENGINE
+    return PROJ_PATH;
+#endif
+    return "";
 }
 
 
