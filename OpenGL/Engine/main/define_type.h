@@ -44,4 +44,6 @@
 
 #endif
 
+#define TEST_ENGINE
+
 #endif

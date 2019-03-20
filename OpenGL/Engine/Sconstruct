@@ -26,6 +26,7 @@ env.SetOption("implicit_cache", 1)
 
 Export('env')
 SConscript("platform/"+platform+"/Scons")
+Sconscript("core/Scons")
 SConscript("main/Scons")
 Sconscript("renderer/Scons")
 

@@ -11,6 +11,12 @@ Rasterizer::~Rasterizer()
     
 }
 
+void Rasterizer::postTextureGeometry()
+{
+    
+}
+
+
 unsigned int Rasterizer::postTexture(int width, int height, unsigned char* texData, TextureType type) const
 {
     unsigned int texId;
