@@ -35,11 +35,11 @@ std::string FileLoader::getProjPath()
     char data[_MAX_PATH];
     _getcwd(data, _MAX_PATH);
     return std::string(data);
-#endif
-#ifdef TEST_ENGINE
+#elif TEST_ENGINE
     return PROJ_PATH;
-#endif
+#else
     return "";
+#endif
 }
 
 
